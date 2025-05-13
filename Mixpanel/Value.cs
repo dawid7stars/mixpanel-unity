@@ -48,12 +48,10 @@ namespace mixpanel
         [SerializeField] private bool _bool;
         [SerializeField] private double _number;
 
-        [NonSerialized]
-        private List<Value> _array = new List<Value>(50);
+        [NonSerialized] private List<Value> _array = new List<Value>(50);
         [SerializeField] private string[] _arrayData;
 
-        [NonSerialized]
-        private Dictionary<string, Value> _container = new Dictionary<string, Value>(5);
+        [NonSerialized] private Dictionary<string, Value> _container = new Dictionary<string, Value>(5);
         [SerializeField] private string[] _containerKeys;
         [SerializeField] private string[] _containerValues;
 
@@ -143,6 +141,7 @@ namespace mixpanel
                 case ValueTypes.OBJECT:
                     return _container.GetEnumerator();
             }
+
             throw new ArgumentOutOfRangeException();
         }
 
@@ -160,6 +159,7 @@ namespace mixpanel
                     case ValueTypes.OBJECT:
                         return _container.Count;
                 }
+
                 throw new ArgumentOutOfRangeException();
             }
         }
@@ -179,7 +179,7 @@ namespace mixpanel
             );
             return _container.ContainsKey(key);
         }
-        
+
         public void Add(Value value)
         {
             Assert.IsTrue(_valueType == ValueTypes.ARRAY || _valueType == ValueTypes.UNDEFINED,
@@ -215,7 +215,7 @@ namespace mixpanel
             );
             _container.Remove(key);
         }
-        
+
         public IEnumerable<Value> Values
         {
             get
@@ -230,6 +230,7 @@ namespace mixpanel
                     case ValueTypes.OBJECT:
                         return _container.Values;
                 }
+
                 throw new ArgumentOutOfRangeException();
             }
         }
@@ -244,9 +245,16 @@ namespace mixpanel
 
         public void Merge(Value other)
         {
-            Assert.IsTrue(_valueType == ValueTypes.ARRAY || _valueType == ValueTypes.OBJECT,
+
+            Assert.IsTrue(_valueType == ValueTypes.ARRAY || _valueType == ValueTypes.OBJECT || _valueType == ValueTypes.UNDEFINED,
                 $"Merge operation failed: _valueType is {_valueType}, but expected ValueTypes.ARRAY or ValueTypes.OBJECT."
             );
+            if (_valueType == ValueTypes.UNDEFINED)
+            {
+                _valueType = other._valueType;
+                _dataType = other._dataType;
+            }
+            
             switch (other._valueType)
             {
                 case ValueTypes.ARRAY:

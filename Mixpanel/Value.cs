@@ -12,8 +12,6 @@ namespace mixpanel
     [Serializable]
     public class Value : IEnumerable, ISerializationCallbackReceiver
     {
-
-
         private enum ValueTypes
         {
             UNDEFINED,
@@ -245,6 +243,10 @@ namespace mixpanel
 
         public void Merge(Value other)
         {
+            if (other._valueType == ValueTypes.UNDEFINED || other._valueType == ValueTypes.NULL)
+            {
+                return;
+            }
 
             Assert.IsTrue(_valueType == ValueTypes.ARRAY || _valueType == ValueTypes.OBJECT || _valueType == ValueTypes.UNDEFINED,
                 $"Merge operation failed: _valueType is {_valueType}, but expected ValueTypes.ARRAY or ValueTypes.OBJECT."

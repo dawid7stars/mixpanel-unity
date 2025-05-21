@@ -164,7 +164,7 @@ namespace mixpanel
 
         public bool Contains(int index)
         {
-            Assert.IsTrue(_valueType == ValueTypes.ARRAY,
+            Assert.IsTrue(_valueType == ValueTypes.ARRAY || _valueType == ValueTypes.UNDEFINED,
                 $"Assertion failed: _valueType is {_valueType}, but expected ValueTypes.ARRAY."
             );
             return _array.Contains(index);
@@ -172,7 +172,7 @@ namespace mixpanel
 
         public bool ContainsKey(string key)
         {
-            Assert.IsTrue(_valueType == ValueTypes.OBJECT,
+            Assert.IsTrue(_valueType == ValueTypes.OBJECT || _valueType == ValueTypes.UNDEFINED,
                 $"Assertion failed: _valueType is {_valueType}, but expected ValueTypes.OBJECT."
             );
             return _container.ContainsKey(key);
@@ -235,7 +235,7 @@ namespace mixpanel
 
         public bool TryGetValue(string key, out Value value)
         {
-            Assert.IsTrue(_valueType == ValueTypes.OBJECT,
+            Assert.IsTrue(_valueType == ValueTypes.OBJECT || _valueType == ValueTypes.UNDEFINED,
                 $"Assertion failed: _valueType is {_valueType}, but expected ValueTypes.OBJECT."
             );
             return _container.TryGetValue(key, out value);
